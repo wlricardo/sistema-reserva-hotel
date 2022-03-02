@@ -1,5 +1,7 @@
 package actions;
 
+import entities.Hospede;
+
 public abstract class Menu {
 
 	public static void principal() {
@@ -13,5 +15,5 @@ public abstract class Menu {
 		System.out.println("[3] Relatório");
 		System.out.println("[0] Sair");
 		System.out.print("> ");
-	}
+	}	
 }
