@@ -1,12 +1,17 @@
 package application;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
 import actions.Input;
-import actions.Menu;
+import actions.Mensagem;
 import entities.Hospede;
+import entities.Reserva;
+import entities.Suite;
+import exceptions.ReservaException;
 import exceptions.ValorException;
 
 public class Program {
@@ -15,7 +20,8 @@ public class Program {
 
 		Locale.setDefault(Locale.US);
 		Scanner sc = new Scanner(System.in);
-		Hospede hospede;
+
+		Reserva reserva = new Reserva();
 
 		int opcao;
 
@@ -23,7 +29,7 @@ public class Program {
 			do {
 				// Escolher opção
 				try {
-					Menu.principal();
+					Mensagem.principal();
 					opcao = Input.escolherOpcaoMenu();
 					break;
 				} catch (InputMismatchException e) {
@@ -36,38 +42,83 @@ public class Program {
 			// Pegar opção
 			switch (opcao) {
 			case 1: {
-				int codigo, idade;
-				String nome, endereco;
+				List<Hospede> hospedes = new ArrayList<Hospede>();
+				Hospede hospede = null;
+				Suite suite = null;
+				int numeroDeHospedes = 0;
 
-				// Fornecendo valores do hóspede
 				do {
 					try {
-						codigo = Input.codigo();
+						// Verificação do número de hóspedes
+						numeroDeHospedes = Input.qtdHospedes();
+						Mensagem.cadastrarHospedes();
 						break;
-					} catch (ValorException e) {
-						System.out.println(e.getMessage());
 					} catch (InputMismatchException e) {
-						System.out.println("\n ** Erro! Apenas valores numéricos são permitidos. Tente novamente **\n");
-					}
-				} while (true);
-
-				// Nome do hóspede
-				do {
-					try {
-						nome = Input.nome();
-						break;
+						System.out.println("\n   ** Erro ! Informe apenas valores numéricos **\n");
 					} catch (ValorException e) {
 						System.out.println(e.getMessage());
 					}
 				} while (true);
 
-				// Endereço do hóspede
-				endereco = Input.endereco();
+				/*
+				 * Fornecendo dados do hóspede
+				 */
+				for (int i = 0; i < numeroDeHospedes; i++) {
 
-				// Idade do hóspede
+					// Códiugo do hóspede
+					int codigo;
+					do {
+						try {
+							codigo = Input.codigo();
+							break;
+						} catch (ValorException e) {
+							System.out.println(e.getMessage());
+						} catch (InputMismatchException e) {
+							System.out.println(
+									"\n ** Erro! Apenas valores numéricos são permitidos. Tente novamente **\n");
+						}
+					} while (true);
+					// Nome do hóspede
+					String nome;
+					do {
+						try {
+							nome = Input.nome();
+							break;
+						} catch (ValorException e) {
+							System.out.println(e.getMessage());
+						}
+					} while (true);
+
+					// Endereço do hóspede
+					String endereco;
+					endereco = Input.endereco();
+					// Idade do hóspede
+					int idade;
+					do {
+						try {
+							idade = Input.idade();
+							break;
+						} catch (ValorException e) {
+							System.out.println(e.getMessage());
+						} catch (InputMismatchException e) {
+							System.out.println("\n ** Erro! Informe apenas valores numéricos **\n");
+						}
+					} while (true);
+
+					// Instanciando um hóspede
+					hospede = new Hospede(codigo, nome, endereco, idade);
+					hospedes.add(hospede);
+				}
+
+				/*
+				 * Fornecendo dados da suite
+				 */
+
+				// Número da suite
+				int numero;
 				do {
 					try {
-						idade = Input.idade();
+						numero = Input.numero();
 						break;
 					} catch (ValorException e) {
 						System.out.println(e.getMessage());
@@ -75,13 +126,42 @@ public class Program {
 						System.out.println("\n ** Erro! Informe apenas valores numéricos **\n");
 					}
 				} while (true);
-				
-				// Instanciando um hóspede
-				hospede = new Hospede(codigo, nome, endereco, idade);
+
+				// Tipo
+				String tipo;
+				tipo = Input.tipo();
+
+				// Capacidade
+				int capacidade;
+				do {
+					try {
+						capacidade = Input.capacidade(hospedes);
+						break;
+					} catch (ValorException e) {
+						System.out.println(e.getMessage());
+					} catch (ReservaException e) {
+						System.out.println(e.getMessage());
+					} catch (InputMismatchException e) {
+						System.out.println("\n ** Erro! Informe apenas valores numéricos **\n");
+					}
+
+				} while (true);
+
+				// Valor da diária
+				double valorDaDiaria;
+				do {
+					try {
+						valorDaDiaria = Input.valorDaDiaria();
+						break;
+					} catch (ValorException e) {
+						System.out.println(e.getMessage());
+					}
+				} while (true);
+
 				break;
 			}
 			default:
-				throw new IllegalArgumentException("Unexpected value: " + key);
+				throw new IllegalArgumentException("Unexpected value: ");
 			}
 
 		} while (Input.continuar().toUpperCase().equals("S"));

@@ -1,8 +1,6 @@
 package actions;
 
-import entities.Hospede;
-
-public abstract class Menu {
+public abstract class Mensagem {
 
 	public static void principal() {
 		System.out.println("\n--------------------------------------");
@@ -15,5 +13,11 @@ public abstract class Menu {
 		System.out.println("[3] Relatório");
 		System.out.println("[0] Sair");
 		System.out.print("> ");
-	}	
+	}
+
+	public static void cadastrarHospedes() {
+		System.out.println("\n-------------------------");
+		System.out.println(" Cadastrado dos hóspedes ");
+		System.out.println("-------------------------");
+	}
 }

@@ -51,6 +51,14 @@ public class Reserva {
 		return hospedes;
 	}
 
+	public HashMap<Suite, List<Hospede>> getHospedesDaSuite() {
+		return hospedesDaSuite;
+	}
+
+	public HashMap<HashMap<Suite, List<Hospede>>, Integer> getReservas() {
+		return reservas;
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 7;
@@ -133,9 +141,9 @@ public class Reserva {
 		return total;
 	}
 
-	public boolean verificarCapacidade(Suite suite, List<Hospede> hospedes) {
+	public boolean verificarCapacidade(List<Hospede> hospedes, int capacidade) {
 		int numHospedes = hospedesAcimaDoisAnos(hospedes);
-		return (numHospedes > suite.getCapacidade());
+		return (numHospedes > capacidade);
 	}
 
 	public double calcularDiaria(Suite s, int dias) {
