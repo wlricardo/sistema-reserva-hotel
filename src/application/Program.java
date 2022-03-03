@@ -155,8 +155,12 @@ public class Program {
 						break;
 					} catch (ValorException e) {
 						System.out.println(e.getMessage());
+					} catch (InputMismatchException e) {
+						System.out.println("\n ** Erro! Informe apenas valores numéricos **\n");
 					}
 				} while (true);
+
+				suite = new Suite(numero, tipo, capacidade, valorDaDiaria);
 
 				break;
 			}

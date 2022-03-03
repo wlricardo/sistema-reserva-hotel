@@ -3,21 +3,20 @@ package entities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
+import java.util.TreeMap;
 
 public class Reserva {
 
+	private List<Hospede> hospedes = new ArrayList<>();
 	private Suite suite;
 	private Integer qtdDePessoas;
 	private Integer qtdDeDias;
-	private List<Hospede> hospedes = new ArrayList<>();
-	private HashMap<Suite, List<Hospede>> hospedesDaSuite = new HashMap<>();
-	private HashMap<HashMap<Suite, List<Hospede>>, Integer> reservas = new HashMap<>();
 
 	public Reserva() {
 	}
 
 	public Reserva(Suite suite, Integer qtdDePessoas, Integer qtdDeDias) {
+		super();
 		this.suite = suite;
 		this.qtdDePessoas = qtdDePessoas;
 		this.qtdDeDias = qtdDeDias;
@@ -51,63 +50,30 @@ public class Reserva {
 		return hospedes;
 	}
 
-	public HashMap<Suite, List<Hospede>> getHospedesDaSuite() {
-		return hospedesDaSuite;
-	}
-
-	public HashMap<HashMap<Suite, List<Hospede>>, Integer> getReservas() {
-		return reservas;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 59 * hash + Objects.hashCode(this.suite);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final Reserva other = (Reserva) obj;
-		return Objects.equals(this.suite, other.suite);
-	}
-
 	@Override
 	public String toString() {
 		return "Reserva\n" + "Suite#:" + suite + "\nNúmero de hóspedes: " + qtdDePessoas + "\nQtd de diárias: "
 				+ qtdDeDias + "\nHóspedes: " + hospedes + "\n";
 	}
 
-	public void imprimirReserva(HashMap<Suite, List<Hospede>> hospedesDaSuite, int dias) {
+	public void imprimirReserva(Reserva r, int dias) {
 		System.out.println("Hóspedes:");
 		System.out.println("---------");
-		for (Suite s : hospedesDaSuite.keySet()) {
-			for (Hospede h : hospedesDaSuite.get(s)) {
-				System.out.println(h.toString());
-			}
-			System.out.println("Suite:");
-			System.out.println("-----");
-			System.out.println(s.toString());
-
-			System.out.println("");
-			System.out.println("Total da estadia:");
-			System.out.println("-----------------");
-			System.out.println("Total de diárias: " + dias);
-			System.out.println("Valor da diária: R$ " + s.getValorDaDiaria());
-			System.out.println("Total: R$ " + calcularDiaria(s, dias));
+		for (Hospede h : r.getHospedes()) {
+			System.out.println(h.toString());
 		}
+		System.out.println("Suite:");
+		System.out.println("-----");
+		System.out.println(r.getSuite().toString());
+
+		System.out.println("Total da estadia:");
+		System.out.println("-----------------");
+		System.out.println("Total de diárias: " + dias);
+		System.out.println("Valor da diária: R$ " + r.getSuite().getValorDaDiaria());
+		System.out.println("Total: R$ " + calcularDiaria(r.getSuite(), dias));
 	}
 
-	public void imprimirRelatorio(HashMap<HashMap<Suite, List<Hospede>>, Integer> reservas) {
+	public void imprimirRelatorio(TreeMap<Reserva, Integer> reservas) {
 		double total = 0.0;
 		double diaria = 0.0;
 
